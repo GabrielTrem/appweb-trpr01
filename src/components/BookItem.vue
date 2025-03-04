@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import {type Book} from '../scripts/type.ts'
 
-defineProps<{
+const props = defineProps<{
     book: Book
 }>()
+
+const emit = defineEmits(['open-modifyForm', 'remove-book'])
+
+function handleOpenModifyForm(){
+    emit('open-modifyForm', props.book.id)
+}
+
+function handleDeleteBook(){
+    emit('remove-book', props.book.id)
+}
 </script>
 
 <template>
@@ -12,8 +22,9 @@ defineProps<{
                 <img :src="book.coverImage" class="rounded" :alt="'Image of the cover of the book ' + book.title" width="40px">
                 <h4>{{ book.title }}</h4>
                 <div class="justify-content-end">
-                    <button class="btn btn-outline-warning me-2">✏️ Modifier</button>
-                    <button class="btn btn-outline-danger">❌ Retirer</button>
+                    <button class="btn btn-outline-primary me-2" @click="handleOpenModifyForm"><i class="bi bi-copy"></i></button>
+                    <button class="btn btn-outline-warning me-2" @click="handleOpenModifyForm"><i class="bi bi-pencil-fill"></i></button>
+                    <button class="btn btn-outline-danger" @click="handleDeleteBook"><i class="bi bi-trash3-fill"></i></button>
                 </div>
             </div>
         </a>

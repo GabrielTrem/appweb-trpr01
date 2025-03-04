@@ -4,6 +4,7 @@ import AddBookForm from "./AddBookForm.vue";
 import SearchBook from "./SearchBook.vue";
 import { type Book } from '../scripts/type.ts'
 import {ref} from 'vue'
+import ModifyBookForm from "./ModifyBookForm.vue";
 
 
 let bookTemplate = {
@@ -20,6 +21,30 @@ let bookTemplate = {
 const books = ref<Book[]>([
     bookTemplate
 ]);
+
+let lastId = ref<number>(books.value.length);
+
+function addBook(newBook : Book){
+    lastId.value++
+    newBook.id = lastId.value
+    books.value.push(newBook)
+}
+
+function modifyBook(modifiedBook : Book){
+    lastId.value++
+    modifiedBook.id = lastId.value
+    books.value.push(modifiedBook)
+}
+
+function removeBook(bookId : number) {
+    books.value = books.value.filter(book => book.id !== bookId)
+}
+
+let showAddingForm = ref<boolean>(false);
+let showModifyingForm = ref<boolean>(false);
+
+let currentBookToModifyId = ref<number>(0)
+
 </script>
 
 <template>
@@ -29,18 +54,25 @@ const books = ref<Book[]>([
                 <SearchBook />
             </div>
             <div class="col-3">
-                <button class="btn btn-success w-100">+ Ajouter</button>
+                <button class="btn btn-success w-100" @click="showAddingForm = true, showModifyingForm = false"><i class="bi bi-plus-lg"></i> Ajouter</button>
             </div>
             <div class="col-3">
-                <button class="btn btn-secondary w-100 ">Exporter en csv</button>
+                <button class="btn btn-secondary w-100 "><i class="bi bi-arrow-bar-up"></i> Exporter en csv</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-6">
-                <BookList :books="books"/>
+        <div class="mb-2">
+            <div v-if="showAddingForm">
+                <AddBookForm @add-book="addBook($event)" @close-form="showAddingForm = false"/>
             </div>
-            <div class="col-6">
-                <AddBookForm @add-book="books.push($event)"/>
+            <div v-if="showModifyingForm">
+                <ModifyBookForm :book="books[1]" @modify-book="modifyBook($event)" @close-form="showModifyingForm = false"/>
+            </div>
+            <div >
+                <BookList 
+                :books="books" 
+                @open-modify-form="currentBookToModifyId = $event, showModifyingForm = true, showAddingForm = false"
+                @remove-book="removeBook($event)"
+                />
             </div>
         </div>
     </main>

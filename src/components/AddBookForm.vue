@@ -2,10 +2,9 @@
 import type { Book } from '../scripts/type';
 import {ref} from 'vue'
 
-
 const newBook = ref<Book>(
     {
-        id : 2,
+        id : 0,
         title : "",
         synopsis : "",
         author : "",
@@ -16,18 +15,22 @@ const newBook = ref<Book>(
     }
 );
 
-const emit = defineEmits<{
-    (event: 'add-book', book: Book): void
-}>()
+const emit = defineEmits(['add-book', 'close-form'])
 
-function verifyBook(){
-    let book = newBook.value
-    emit('add-book', book)
+function handleAddBook(){
+    emit('add-book', {...newBook.value})
+}
+function handleCloseFormWindow(){
+    emit('close-form')
 }
 </script>
 
 <template>
-    <div class="border rounded p-2">
+    <div class="border rounded p-2 ">
+        <div class="d-flex justify-content-between">
+            <h4>Ajouter un livre</h4>
+            <button class="btn btn-outline-danger" @click="handleCloseFormWindow">❌</button>
+        </div>
         <div class="row">
             <div class="col-8">
                 <div class="mb-3">
@@ -67,7 +70,7 @@ function verifyBook(){
                     <input type="date" class="form-control" id="bookReleaseDate" v-model="newBook.releaseDate">
                 </div>
             </div>
-            <button class="btn btn-success w-100" @click="verifyBook">Ajouter</button>
+            <button class="btn btn-success w-100" @click="handleAddBook">Ajouter</button>
         </div>
 </template>
 
