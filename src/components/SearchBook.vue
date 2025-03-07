@@ -1,14 +1,25 @@
 <script setup lang="ts">
+import type { Book } from '../scripts/type'
+import {ref} from 'vue'
+
+const props = defineProps<{
+    books : Book[] 
+}>()
+
+const searchValue = ref<string>('')
+
+const emit = defineEmits(['filter-books'])
+
+function filterBooks(){
+    emit('filter-books', props.books.filter(book => book.title.includes(searchValue.value)))
+}
 </script>
 
 <template>
-    <div>
-        <label class="visually-hidden" for="bookSearch">Rechercher...</label>
-        <div class="input-group">
-        <div class="input-group-text">🔍</div>
-            <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="Rechercher...">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+            <input v-model="searchValue" v-on:input="filterBooks" type="text" class="form-control" placeholder="Rechercher..." aria-label="Recipient's username" aria-describedby="basic-addon2">
         </div>
-    </div>
 </template>
 
 <style scoped>

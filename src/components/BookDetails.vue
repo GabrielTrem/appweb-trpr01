@@ -16,7 +16,7 @@ function handleCloseWindow(){
   <div class="container border rounded p-2 ">
     <div class="d-flex justify-content-between">
             <h3><b>Détails du livre</b></h3>
-            <button class="btn btn-outline-danger" @click="handleCloseWindow"><i class="bi bi-x"></i></button>
+            <button class="btn btn-outline-danger" @click="handleCloseWindow"><i class="bi bi-x-lg"></i></button>
         </div>
     <div class="row">
       <div class="col-md-4">
@@ -30,8 +30,11 @@ function handleCloseWindow(){
         <p v-if="book.releaseDate !== ''"><strong>Date de sortie:</strong> {{ book.releaseDate }}</p>
         <p v-else><strong>Date de sortie:</strong> ------</p>
         <p><strong>Prix:</strong> ${{ book.price}}</p>
-        <p><strong>Stock:</strong> {{ book.stock }}</p>
-        
+        <p><strong>Stock: </strong>
+            <span v-if="book.stock >= 10" class="badge text-bg-success">{{ book.stock }} en stock</span>
+            <span v-else-if="book.stock >= 5" class="badge text-bg-warning">{{ book.stock }} en stock</span>
+            <span v-else class="badge text-bg-danger">{{ book.stock }} en stock</span>
+        </p>
         <h4>Résumé</h4>
         <p>{{ book.synopsis }}</p>
       </div>
