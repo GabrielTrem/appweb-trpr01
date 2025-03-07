@@ -32,21 +32,22 @@ function handleCloseFormWindow(){
             <button class="btn btn-outline-danger" @click="handleCloseFormWindow">❌</button>
         </div>
         <div class="row">
-            <div class="col-8">
+            <div class="col-10">
                 <div class="mb-3">
                     <label for="bookTitle" class="form-label">Titre *</label>
                     <input type="text" class="form-control" id="bookTitle" v-model="newBook.title">
                 </div>
                 <div class="mb-3">
                     <label for="bookSynopsis" class="form-label">Résumé *</label>
-                    <textarea class="form-control" id="bookSynopsis" rows="3" v-model="newBook.synopsis"></textarea>
+                    <textarea class="form-control" id="bookSynopsis" rows="4" v-model="newBook.synopsis"></textarea>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-2">
                 <label for="bookCover" class="form-label">Image</label>
                 <input type="url" class="form-control" id="bookCover" placeholder="URL" v-model="newBook.coverImage">
-                <div class="border rounded p-2">
-                    <img src="" class="rounded" alt="" id="bookCover" width="40px">
+                <div class="border d-flex rounded p-2 justify-content-center mt-2">
+                    <img v-if="newBook.coverImage !== ''" :src="newBook.coverImage" class="rounded img-fluid" :alt="'Image of the cover of the book ' + newBook.title">
+                    <img v-else src="../assets/images/no-cover.jpg" class="rounded img-fluid" alt="Image representant un livre sans couverture specifique">
                 </div>
             </div>
         </div>

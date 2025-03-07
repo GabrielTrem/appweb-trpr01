@@ -6,7 +6,7 @@ defineProps<{
     books: Book[]
 }>()
 
-const emit = defineEmits(['open-modifyForm', 'remove-book'])
+const emit = defineEmits(['open-modifyForm', 'remove-book', 'show-details', 'duplicate-book'])
 
 function handleOpenModifyForm(book : Book){
     emit('open-modifyForm', book)
@@ -14,6 +14,14 @@ function handleOpenModifyForm(book : Book){
 
 function handleRemoveBook(bookId : number){
     emit('remove-book', bookId)
+}
+
+function handleShowDetails(book : Book){
+    emit('show-details', book)
+}
+
+function handleDuplicateBook(book : Book){
+    emit('duplicate-book', book)
 }
 </script>
 <template>
@@ -28,6 +36,8 @@ function handleRemoveBook(bookId : number){
             :book="book" 
             @open-modifyForm="handleOpenModifyForm($event)"
             @remove-book="handleRemoveBook($event)"
+            @show-details="handleShowDetails($event)"
+            @duplicate-book="handleDuplicateBook($event)"
             />
         </div>
     </div>
