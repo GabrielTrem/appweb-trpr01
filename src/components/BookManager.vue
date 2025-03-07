@@ -6,6 +6,7 @@ import { type Book } from '../scripts/type.ts'
 import {ref} from 'vue'
 import ModifyBookForm from "./ModifyBookForm.vue";
 import BookDetails from "./BookDetails.vue";
+import {initialBooks} from "../scripts/initialBooks.ts"
 
 
 let bookTemplate = {
@@ -19,9 +20,7 @@ let bookTemplate = {
     stock : 0
 }
 
-const books = ref<Book[]>([
-    bookTemplate
-]);
+const books = ref<Book[]>(initialBooks);
 
 const filteredBooks = ref<Book[]>(books.value);
 
