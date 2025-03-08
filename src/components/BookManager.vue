@@ -80,15 +80,11 @@ const exportToCSV = () => {
 </script>
 
 <template>
-    <!-- <header>
-        <img class="img-fluid" src="../assets/images/book-shelves-banner.jpg" alt="">
-    </header> -->
-    <main class="container min-vh-100">
+    <header>
+        <img class="img-fluid" src="../assets/images/book-banner.jpg" alt="">
+    </header>
+    <main class="container min-vh-100 mt-4">
       <div class="justify-content-center align-items-center">
-        <div v-if="getBooksThatAreOutOfStock() !== ''" class="alert alert-danger text-center alert-dismissible fade show" role="alert">
-            <p v-html="OUT_OF_STOCK_ALERT_MESSAGE + getBooksThatAreOutOfStock()"></p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> 
-        </div>
           <div class="row mb-2">
               <div class="col-6">
                   <SearchBook :books="books" @filter-books="filteredBooks = $event"/>
@@ -128,6 +124,10 @@ const exportToCSV = () => {
           </div>
       </div>
     </main>
+    <div v-if="getBooksThatAreOutOfStock() !== ''" class="alert alert-danger text-center alert-dismissible fade show position-fixed top-0 start-0 w-100 z-index-1030" role="alert">
+        <p v-html="OUT_OF_STOCK_ALERT_MESSAGE + getBooksThatAreOutOfStock()"></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> 
+    </div>
     <footer class="text-center py-3">
         <div class="container">
             <p>&copy; 2025 Book Manager. All rights reserved.</p>
