@@ -26,8 +26,11 @@ Utilisation:
 - Utiliser pour aider à intégrer la vérification des forms avec quelques passages générés, mais la plupart on été modifié par la suite
 - Utiliser pour générer les bonnes classes bootstrap parfois, comme pour l'alert de out of stock
 - Utiliser pour aider à trouver des bugs.
-- Utiliser pour générer le code de la fonction exportCsv
+- Utiliser pour générer le code de la fonction exportToCsv
 - Utiliser pour trouver certaines fonctions de vue.js (ex: v-on:input, v-html ou le filter du array)
+- Utiliser pour générer des messages d'erreurs (ex: Vérification de forms).
+- Utiliser pour générer un computed pour books.length
+- Utiliser pour générer un computed pour filteredBooks
 
 # URL du repo Github
 

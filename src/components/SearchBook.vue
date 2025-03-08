@@ -1,26 +1,19 @@
 <script setup lang="ts">
-import type { Book } from '../scripts/type'
 import {ref} from 'vue'
 
-const props = defineProps<{
-    books : Book[] 
-}>()
-
-const searchValue = ref<string>('')
+const searchQuery = ref<string>('')
 
 const emit = defineEmits(['filter-books'])
 
 function filterBooks(){
-    if(props.books.length !== 0){
-        emit('filter-books', {...props.books.filter(book => book.title.toLowerCase().includes(searchValue.value.toLowerCase()))})
-    }
+    emit('filter-books', searchQuery.value)
 }
 </script>
 
 <template>
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-            <input v-model="searchValue" v-on:input="filterBooks" type="text" class="form-control" placeholder="Rechercher..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <input v-model="searchQuery" v-on:input="filterBooks" type="text" class="form-control" placeholder="Rechercher..." aria-label="Recipient's username" aria-describedby="basic-addon2">
         </div>
 </template>
 

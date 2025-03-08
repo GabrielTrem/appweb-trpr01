@@ -2,11 +2,15 @@
 import BookItem from "./BookItem.vue";
 import { type Book } from '../scripts/type.ts'
 import {computed} from 'vue'
+import { MESSAGE_WHEN_LIST_EMPTY } from "../scripts/constants.ts";
 
 const props = defineProps<{
     books: Book[]
+    maxLengthTitle: number
 }>()
 
+
+//Générer par chatgpt
 const booksCount = computed(() => props.books.length);
 
 const emit = defineEmits(['open-modifyForm', 'remove-book', 'show-details', 'duplicate-book'])
@@ -44,13 +48,14 @@ function handleDuplicateBook(book : Book){
             v-for="book of books" 
             :key="book.id" 
             :book="book" 
+            :maxLengthTitle="maxLengthTitle"
             @open-modifyForm="handleOpenModifyForm($event)"
             @remove-book="handleRemoveBook($event)"
             @show-details="handleShowDetails($event)"
             @duplicate-book="handleDuplicateBook($event)"
             />
             <div v-else class="list-group-item text-center">
-                Il n'y a aucun livre dans la liste pour le moment. Ajoutez-en un pour commencer !
+                {{ MESSAGE_WHEN_LIST_EMPTY }}
             </div>
         </div>
     </div>

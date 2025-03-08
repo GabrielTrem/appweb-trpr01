@@ -4,6 +4,7 @@ import {OUT_OF_STOCK_VALUE, LOW_STOCK_VALUE, NO_COVER_LINK, NO_COVER_ALT, BOOK_C
 
 const props = defineProps<{
     book: Book
+    maxLengthTitle: number
 }>()
 
 const emit = defineEmits(['open-modifyForm', 'remove-book', 'show-details', 'duplicate-book'])
@@ -23,6 +24,10 @@ function handleShowDetails(){
 function handleDuplicateBook(){
     emit('duplicate-book', {...props.book})
 }
+
+function truncateTitle(title : string, maxLength : number) {
+    return title.length > maxLength ? title.substring(0, maxLength) + '...' : title;
+}
 </script>
 
 <template>
@@ -30,7 +35,7 @@ function handleDuplicateBook(){
             <div class="d-flex justify-content-between align-items-center">
                 <img v-if="book.coverImage !== ''" :src="book.coverImage" class="rounded" :alt="BOOK_COVER_ALT + book.title" width="50px">
                 <img v-else :src="NO_COVER_LINK" class="rounded" :alt="NO_COVER_ALT" width="50px">
-                <h4 class="p-2">{{ book.title }}</h4>
+                <h4 class="p-2">{{truncateTitle(book.title, maxLengthTitle)}}</h4>
                 <span v-if="book.stock >= LOW_STOCK_VALUE" class="badge text-bg-success">{{ book.stock }} en stock</span>
                 <span v-else-if="book.stock > OUT_OF_STOCK_VALUE" class="badge text-bg-warning">{{ book.stock }} en stock</span>
                 <span v-else class="badge text-bg-danger">{{ book.stock }} en stock</span>

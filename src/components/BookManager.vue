@@ -3,19 +3,26 @@ import BookList from "./BookList.vue";
 import AddBookForm from "./AddBookForm.vue";
 import SearchBook from "./SearchBook.vue";
 import { type Book } from '../scripts/type.ts'
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
 import ModifyBookForm from "./ModifyBookForm.vue";
 import BookDetails from "./BookDetails.vue";
 import {initialBooks} from "../scripts/initialBooks.ts"
-import {OUT_OF_STOCK_ALERT_MESSAGE, WEBSITE_HEADER_IMG_ALT} from '../scripts/constants.ts'
+import {OUT_OF_STOCK_ALERT_MESSAGE, WEBSITE_HEADER_IMG_ALT, 
+FOOTER_COPYRIGHT, BOOK_TITLE_MAX_LENGTH_IN_FULL_VIEW, BOOK_TITLE_MAX_LENGTH_IN_SHORTEN_VIEW} from '../scripts/constants.ts'
 
-const books = ref<Book[]>([]);
-books.value.push(...initialBooks)
+const books = ref<Book[]>([...initialBooks]);
 
-const filteredBooks = ref<Book[]>([]);
-filteredBooks.value.push(...books.value)
+// const filteredBooks = ref<Book[]>([]);
+// filteredBooks.value.push(...books.value)
 
 const lastId = ref<number>(books.value.length);
+
+//Généré par chatgpt
+const searchQuery = ref<string>('');
+const filteredBooks = computed(() => {
+  if (!searchQuery.value) return books.value;
+  return books.value.filter(book => book.title.toLowerCase().includes(searchQuery.value.toLowerCase()));
+});
 
 function addBook(newBook : Book){
     lastId.value++
@@ -32,23 +39,10 @@ function modifyBook(modifiedBook : Book){
     if(indexFiltered !== -1){
         filteredBooks.value[indexFiltered] = modifiedBook;
     }
-    currentBookToModify.value = null
 }
 
 function removeBook(bookId : number) {
-    const indexInBooks = books.value.findIndex(book => book.id === bookId);
-    const indexInFilteredBooks = filteredBooks.value.findIndex(book => book.id === bookId);
-
-    if (indexInBooks !== -1) {
-        books.value.splice(indexInBooks, 1);
-    }
-    if (indexInFilteredBooks !== -1) {
-        filteredBooks.value.splice(indexInFilteredBooks, 1);
-    }
-    if (books.value.length === 0) {
-        lastId.value = 0;
-        filteredBooks.value = [];
-    }
+    books.value = books.value.filter(book => book.id !== bookId)
 }
 
 function getBooksThatAreOutOfStock(): string {
@@ -102,12 +96,12 @@ const exportToCSV = () => {
       <div class="justify-content-center align-items-center">
           <div class="row mb-2">
               <div class="col-md-6">
-                  <SearchBook :books="books" @filter-books="filteredBooks = $event"/>
+                  <SearchBook @filter-books="searchQuery = $event"/>
               </div>
               <div class="col-md-3">
                   <button class="btn btn-success w-100" @click="showAddingForm = true, showModifyingForm = false"><i class="bi bi-plus-lg"></i> Ajouter</button>
               </div>
-              <div class="col-md=3">
+              <div class="col-md-3">
                   <button class="btn btn-secondary w-100 " @click="exportToCSV"><i class="bi bi-arrow-bar-up"></i> Exporter en csv</button>
               </div>
           </div>
@@ -120,12 +114,13 @@ const exportToCSV = () => {
                   />
               </div>
               <div v-if="showModifyingForm, currentBookToModify !== null">
-                  <ModifyBookForm :book="currentBookToModify" @modify-book="modifyBook($event)" @close-form="showModifyingForm = false"/>
+                  <ModifyBookForm :book="currentBookToModify" @modify-book="modifyBook($event)" @close-form="showModifyingForm = false, currentBookToModify = null"/>
               </div>
               <div class="row">
                   <div :class="showBookDetailedView ? 'col-md-8' : 'col-md-12'">
                       <BookList 
                       :books="filteredBooks" 
+                      :maxLengthTitle="showBookDetailedView ? BOOK_TITLE_MAX_LENGTH_IN_SHORTEN_VIEW : BOOK_TITLE_MAX_LENGTH_IN_FULL_VIEW"
                       @open-modify-form="currentBookToModify = $event, showModifyingForm = true, showAddingForm = false"
                       @remove-book="removeBook($event)"
                       @show-details="currentBookToShowDetails = $event, showBookDetailedView = true"
@@ -145,7 +140,7 @@ const exportToCSV = () => {
     </div>
     <footer class="text-center py-3">
         <div class="container">
-            <p>&copy; 2025 Book Manager. All rights reserved.</p>
+            <p>&copy;{{FOOTER_COPYRIGHT}}</p>
         </div>
     </footer>
 </template>
