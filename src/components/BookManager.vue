@@ -12,9 +12,6 @@ FOOTER_COPYRIGHT, BOOK_TITLE_MAX_LENGTH_IN_FULL_VIEW, BOOK_TITLE_MAX_LENGTH_IN_S
 
 const books = ref<Book[]>([...initialBooks]);
 
-// const filteredBooks = ref<Book[]>([]);
-// filteredBooks.value.push(...books.value)
-
 const lastId = ref<number>(books.value.length);
 
 //Généré par chatgpt
