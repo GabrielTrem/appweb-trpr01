@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Book } from '../scripts/type';
 import {ref} from 'vue'
-import {NO_COVER_LINK, NO_COVER_ALT, BOOK_COVER_ALT} from '../scripts/constants.ts'
+import {NO_COVER_LINK, NO_COVER_ALT, BOOK_COVER_ALT, ERR_MESSAGE_TITLE, ERR_MESSAGE_SYNOPSIS, ERR_MESSAGE_PRICE, ERR_MESSAGE_STOCK} from '../scripts/constants.ts'
 
 const props = defineProps<{
     book : Book 
@@ -26,6 +26,7 @@ function handleModifyBook(){
     validateForm()
     if(isValid.value){
         emit('modify-book', {...modifiedBook.value})
+        console.log(modifiedBook.value.title)
     }
 }
 
@@ -59,18 +60,18 @@ function handleCloseFormWindow(){
                     <label for="bookTitle" class="form-label">Titre *</label>
                     <input 
                         type="text" class="form-control" 
-                        :class="{'is-invalid' : !book.title, 'is-valid' : book.title}" 
-                        id="bookTitle" v-model="book.title" 
+                        :class="{'is-invalid' : !modifiedBook.title, 'is-valid' : modifiedBook.title}" 
+                        id="bookTitle" v-model="modifiedBook.title" 
                     required>
-                    <div id="bookTitleFeedback" class="invalid-feedback">Le titre est obligatoire!</div>
+                    <div id="bookTitleFeedback" class="invalid-feedback">{{ERR_MESSAGE_TITLE}}</div>
                 </div>
                 <div class="mb-3">
                     <label for="bookSynopsis" class="form-label">Résumé *</label>
                     <textarea class="form-control" 
-                        :class="{'is-invalid' : !book.synopsis, 'is-valid' : book.synopsis}" 
-                        id="bookSynopsis" rows="4" v-model="book.synopsis" required> 
+                        :class="{'is-invalid' : !modifiedBook.synopsis, 'is-valid' : modifiedBook.synopsis}" 
+                        id="bookSynopsis" rows="4" v-model="modifiedBook.synopsis" required> 
                     </textarea>
-                    <div id="bookSynopsisFeedback" class="invalid-feedback">Le résumé est obligatoire!</div>
+                    <div id="bookSynopsisFeedback" class="invalid-feedback">{{ERR_MESSAGE_SYNOPSIS}}</div>
                 </div>
             </div>
             <div class="col-2">
@@ -86,18 +87,18 @@ function handleCloseFormWindow(){
             <div class="mb-3 col-6">
                     <label for="bookPrice" class="form-label">Prix *</label>
                     <input type="number" step=0.01 class="form-control" 
-                        :class="{'is-invalid' : book.price <= 0, 'is-valid' : book.price > 0}" 
-                        id="bookPrice" v-model="book.price" required
+                        :class="{'is-invalid' : modifiedBook.price <= 0, 'is-valid' : modifiedBook.price > 0}" 
+                        id="bookPrice" v-model="modifiedBook.price" required
                     >
-                    <div id="bookPriceFeedback" class="invalid-feedback">Le prix doit être supérieur à 0</div>
+                    <div id="bookPriceFeedback" class="invalid-feedback">{{ERR_MESSAGE_PRICE}}</div>
                 </div>
                 <div class="mb-3 col-6">
                     <label for="bookStock" class="form-label">Inventaire *</label>
                     <input type="number" class="form-control" 
-                        :class="{'is-invalid' : book.stock < 0, 'is-valid' : book.stock >= 0}" 
-                        id="bookStock" v-model="book.stock" required
+                        :class="{'is-invalid' : modifiedBook.stock < 0, 'is-valid' : modifiedBook.stock >= 0}" 
+                        id="bookStock" v-model="modifiedBook.stock" required
                     >
-                    <div id="bookStockFeedback" class="invalid-feedback">Le stock ne peut pas être négatif!</div>
+                    <div id="bookStockFeedback" class="invalid-feedback">{{ERR_MESSAGE_STOCK}}</div>
                 </div>
             </div>
             <div class="row">

@@ -73,7 +73,7 @@ function handleCloseFormWindow(){
                         :class="{'is-invalid' : !newBook.title, 'is-valid' : newBook.title}" 
                         id="bookTitle" v-model="newBook.title" 
                     required>
-                    <div id="bookTitleFeedback" class="invalid-feedback">Le titre est obligatoire!</div>
+                    <div id="bookTitleFeedback" class="invalid-feedback">{{ERR_MESSAGE_TITLE}}</div>
                 </div>
                 <div class="mb-3">
                     <label for="bookSynopsis" class="form-label">Résumé *</label>
@@ -81,7 +81,7 @@ function handleCloseFormWindow(){
                         :class="{'is-invalid' : !newBook.synopsis, 'is-valid' : newBook.synopsis}" 
                         id="bookSynopsis" rows="4" v-model="newBook.synopsis" required> 
                     </textarea>
-                    <div id="bookSynopsisFeedback" class="invalid-feedback">Le résumé est obligatoire!</div>
+                    <div id="bookSynopsisFeedback" class="invalid-feedback">{{ERR_MESSAGE_SYNOPSIS}}</div>
                 </div>
             </div>
             <div class="col-2">
@@ -100,7 +100,7 @@ function handleCloseFormWindow(){
                         :class="{'is-invalid' : newBook.price <= 0, 'is-valid' : newBook.price > 0}" 
                         id="bookPrice" v-model="newBook.price" required
                     >
-                    <div id="bookPriceFeedback" class="invalid-feedback">Le prix doit être supérieur à 0</div>
+                    <div id="bookPriceFeedback" class="invalid-feedback">{{ ERR_MESSAGE_PRICE }}</div>
                 </div>
                 <div class="mb-3 col-6">
                     <label for="bookStock" class="form-label">Inventaire *</label>
@@ -108,7 +108,7 @@ function handleCloseFormWindow(){
                         :class="{'is-invalid' : newBook.stock < 0, 'is-valid' : newBook.stock >= 0}" 
                         id="bookStock" v-model="newBook.stock" required
                     >
-                    <div id="bookStockFeedback" class="invalid-feedback">Le stock ne peut pas être négatif!</div>
+                    <div id="bookStockFeedback" class="invalid-feedback">{{ERR_MESSAGE_STOCK}}</div>
                 </div>
             </div>
             <div class="row">

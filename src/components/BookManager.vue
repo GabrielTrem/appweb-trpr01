@@ -7,6 +7,7 @@ import {ref} from 'vue'
 import ModifyBookForm from "./ModifyBookForm.vue";
 import BookDetails from "./BookDetails.vue";
 import {initialBooks} from "../scripts/initialBooks.ts"
+import {OUT_OF_STOCK_ALERT_MESSAGE} from '../scripts/constants.ts'
 
 const books = ref<Book[]>(initialBooks);
 
@@ -39,11 +40,11 @@ function getBooksThatAreOutOfStock(): string {
     let booksOutOfStock = ''
     books.value.forEach((book : Book) => {
         if(book.stock === 0){
-            booksOutOfStock += '\n • ' + book.title
+            booksOutOfStock += '<br> • ' + book.title
         }
     })
-    return booksOutOfStock
     console.log(booksOutOfStock)
+    return booksOutOfStock
 }
 
 let showAddingForm = ref<boolean>(false);
@@ -85,7 +86,7 @@ const exportToCSV = () => {
     <main class="container min-vh-100">
       <div class="justify-content-center align-items-center">
         <div v-if="getBooksThatAreOutOfStock() !== ''" class="alert alert-danger text-center alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle"></i> Attention, l'inventaire des livres suivants sont épuisés: {{getBooksThatAreOutOfStock()}}
+            <p v-html="OUT_OF_STOCK_ALERT_MESSAGE + getBooksThatAreOutOfStock()"></p>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> 
         </div>
           <div class="row mb-2">
@@ -110,28 +111,17 @@ const exportToCSV = () => {
               <div v-if="showModifyingForm">
                   <ModifyBookForm :book="currentBookToModify" @modify-book="modifyBook($event)" @close-form="showModifyingForm = false"/>
               </div>
-              <div v-if="!showBookDetailedView">
-                  <div class="col-md-12">
+              <div class="row">
+                  <div :class="showBookDetailedView ? 'col-md-8' : 'col-md-12'">
                       <BookList 
                       :books="filteredBooks" 
-                      @open-modify-form="currentBookToModify = {...$event}, showModifyingForm = true, showAddingForm = false"
+                      @open-modify-form="currentBookToModify = $event, showModifyingForm = true, showAddingForm = false"
                       @remove-book="removeBook($event)"
                       @show-details="currentBookToShowDetails = $event, showBookDetailedView = true"
                       @duplicate-book="currentBookToDuplicate = $event, showModifyingForm = false, showAddingForm = true"
                       />
                   </div>
-              </div>
-              <div v-else class="row">
-                  <div class="col-md-8">
-                      <BookList 
-                      :books="filteredBooks" 
-                      @open-modify-form="currentBookToModify = {...$event}, showModifyingForm = true, showAddingForm = false"
-                      @remove-book="removeBook($event)"
-                      @show-details="currentBookToShowDetails = $event, showBookDetailedView = true"
-                      @duplicate-book="currentBookToDuplicate = $event, showModifyingForm = false, showAddingForm = true"
-                      />
-                  </div>
-                  <div class="col-md-4">
+                  <div v-if="showBookDetailedView" class="col-md-4">
                       <BookDetails :book="currentBookToShowDetails" @close-window="showBookDetailedView = false"/>
                   </div>
               </div>
