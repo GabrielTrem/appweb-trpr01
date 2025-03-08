@@ -110,7 +110,7 @@ const exportToCSV = () => {
                     @close-form="showAddingForm = false, currentBookToDuplicate = null"
                   />
               </div>
-              <div v-if="showModifyingForm, currentBookToModify !== null">
+              <div v-if="showModifyingForm && currentBookToModify !== null">
                   <ModifyBookForm 
                   :key="currentBookToModify.id"
                   :book="currentBookToModify" 
