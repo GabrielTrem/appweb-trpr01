@@ -11,7 +11,9 @@ const searchValue = ref<string>('')
 const emit = defineEmits(['filter-books'])
 
 function filterBooks(){
-    emit('filter-books', props.books.filter(book => book.title.toLowerCase().includes(searchValue.value.toLowerCase())))
+    if(props.books.length !== 0){
+        emit('filter-books', {...props.books.filter(book => book.title.toLowerCase().includes(searchValue.value.toLowerCase()))})
+    }
 }
 </script>
 

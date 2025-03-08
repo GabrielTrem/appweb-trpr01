@@ -65,7 +65,7 @@ function handleCloseFormWindow(){
             <button class="btn btn-outline-danger" @click="handleCloseFormWindow"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="row">
-            <div class="col-10">
+            <div class="col-md-10">
                 <div class="mb-3">
                     <label for="bookTitle" class="form-label">Titre *</label>
                     <input 
@@ -84,7 +84,7 @@ function handleCloseFormWindow(){
                     <div id="bookSynopsisFeedback" class="invalid-feedback">{{ERR_MESSAGE_SYNOPSIS}}</div>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-md-2">
                 <label for="bookCover" class="form-label">Image</label>
                 <input type="url" class="form-control" id="bookCover" placeholder="URL" v-model="newBook.coverImage">
                 <div class="border d-flex rounded p-2 justify-content-center mt-2">
@@ -94,7 +94,7 @@ function handleCloseFormWindow(){
             </div>
         </div>
         <div class="row">
-            <div class="mb-3 col-6">
+            <div class="mb-3 col-md-6">
                     <label for="bookPrice" class="form-label">Prix *</label>
                     <input type="number" step=0.01 class="form-control" 
                         :class="{'is-invalid' : newBook.price <= 0, 'is-valid' : newBook.price > 0}" 
@@ -102,7 +102,7 @@ function handleCloseFormWindow(){
                     >
                     <div id="bookPriceFeedback" class="invalid-feedback">{{ ERR_MESSAGE_PRICE }}</div>
                 </div>
-                <div class="mb-3 col-6">
+                <div class="mb-3 col-md-6">
                     <label for="bookStock" class="form-label">Inventaire *</label>
                     <input type="number" class="form-control" 
                         :class="{'is-invalid' : newBook.stock < 0, 'is-valid' : newBook.stock >= 0}" 
@@ -112,11 +112,11 @@ function handleCloseFormWindow(){
                 </div>
             </div>
             <div class="row">
-                <div class="mb-3 col-6">
+                <div class="mb-3 col-md-6">
                     <label for="bookAuthor" class="form-label">Auteur</label>
                     <input type="text" class="form-control" id="bookAuthor" v-model="newBook.author">
                 </div>
-                <div class="mb-3 col-6">
+                <div class="mb-3 col-md-6">
                     <label for="bookReleaseDate" class="form-label">Date de sortie</label>
                     <input type="date" class="form-control" id="bookReleaseDate" v-model="newBook.releaseDate">
                 </div>

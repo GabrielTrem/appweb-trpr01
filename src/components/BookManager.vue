@@ -7,18 +7,21 @@ import {ref} from 'vue'
 import ModifyBookForm from "./ModifyBookForm.vue";
 import BookDetails from "./BookDetails.vue";
 import {initialBooks} from "../scripts/initialBooks.ts"
-import {OUT_OF_STOCK_ALERT_MESSAGE} from '../scripts/constants.ts'
+import {OUT_OF_STOCK_ALERT_MESSAGE, WEBSITE_HEADER_IMG_ALT} from '../scripts/constants.ts'
 
-const books = ref<Book[]>(initialBooks);
+const books = ref<Book[]>([]);
+books.value.push(...initialBooks)
 
-const filteredBooks = ref<Book[]>(books.value);
+const filteredBooks = ref<Book[]>([]);
+filteredBooks.value.push(...books.value)
 
-let lastId = ref<number>(books.value.length);
+const lastId = ref<number>(books.value.length);
 
 function addBook(newBook : Book){
     lastId.value++
     newBook.id = lastId.value
     books.value.push(newBook)
+    console.log(lastId.value)
 }
 
 function modifyBook(modifiedBook : Book){
@@ -29,11 +32,23 @@ function modifyBook(modifiedBook : Book){
     if(indexFiltered !== -1){
         filteredBooks.value[indexFiltered] = modifiedBook;
     }
+    currentBookToModify.value = null
 }
 
 function removeBook(bookId : number) {
-    books.value = books.value.filter(book => book.id !== bookId)
-    filteredBooks.value = filteredBooks.value.filter(book => book.id !== bookId)
+    const indexInBooks = books.value.findIndex(book => book.id === bookId);
+    const indexInFilteredBooks = filteredBooks.value.findIndex(book => book.id === bookId);
+
+    if (indexInBooks !== -1) {
+        books.value.splice(indexInBooks, 1);
+    }
+    if (indexInFilteredBooks !== -1) {
+        filteredBooks.value.splice(indexInFilteredBooks, 1);
+    }
+    if (books.value.length === 0) {
+        lastId.value = 0;
+        filteredBooks.value = [];
+    }
 }
 
 function getBooksThatAreOutOfStock(): string {
@@ -43,7 +58,6 @@ function getBooksThatAreOutOfStock(): string {
             booksOutOfStock += '<br> • ' + book.title
         }
     })
-    console.log(booksOutOfStock)
     return booksOutOfStock
 }
 
@@ -51,10 +65,11 @@ let showAddingForm = ref<boolean>(false);
 let showModifyingForm = ref<boolean>(false);
 let showBookDetailedView = ref<boolean>(false);
 
-let currentBookToModify = ref<Book>(books.value[0])
-let currentBookToShowDetails = ref<Book>(books.value[0])
+let currentBookToModify = ref<Book | null>(null)
+let currentBookToShowDetails = ref<Book | null>(null)
 let currentBookToDuplicate = ref<Book | null>(null)
 
+//Généré avec chatgpt
 const exportToCSV = () => {
     const headers = ['ID', 'Title', 'Synopsis', 'Author', 'Cover Image', 'Release Date', 'Price', 'Stock'];
     const rows = books.value.map(book => [
@@ -81,18 +96,18 @@ const exportToCSV = () => {
 
 <template>
     <header>
-        <img class="img-fluid" src="../assets/images/book-banner.jpg" alt="">
+        <img class="img-fluid" src="../assets/images/book-banner.jpg" :alt="WEBSITE_HEADER_IMG_ALT">
     </header>
     <main class="container min-vh-100 mt-4">
       <div class="justify-content-center align-items-center">
           <div class="row mb-2">
-              <div class="col-6">
+              <div class="col-md-6">
                   <SearchBook :books="books" @filter-books="filteredBooks = $event"/>
               </div>
-              <div class="col-3">
+              <div class="col-md-3">
                   <button class="btn btn-success w-100" @click="showAddingForm = true, showModifyingForm = false"><i class="bi bi-plus-lg"></i> Ajouter</button>
               </div>
-              <div class="col-3">
+              <div class="col-md=3">
                   <button class="btn btn-secondary w-100 " @click="exportToCSV"><i class="bi bi-arrow-bar-up"></i> Exporter en csv</button>
               </div>
           </div>
@@ -104,7 +119,7 @@ const exportToCSV = () => {
                     @close-form="showAddingForm = false, currentBookToDuplicate = null"
                   />
               </div>
-              <div v-if="showModifyingForm">
+              <div v-if="showModifyingForm, currentBookToModify !== null">
                   <ModifyBookForm :book="currentBookToModify" @modify-book="modifyBook($event)" @close-form="showModifyingForm = false"/>
               </div>
               <div class="row">
@@ -117,8 +132,8 @@ const exportToCSV = () => {
                       @duplicate-book="currentBookToDuplicate = $event, showModifyingForm = false, showAddingForm = true"
                       />
                   </div>
-                  <div v-if="showBookDetailedView" class="col-md-4">
-                      <BookDetails :book="currentBookToShowDetails" @close-window="showBookDetailedView = false"/>
+                  <div v-if="showBookDetailedView, currentBookToShowDetails !== null" class="col-md-4">
+                      <BookDetails :book="currentBookToShowDetails" @close-window="showBookDetailedView = false, currentBookToShowDetails = null"/>
                   </div>
               </div>
           </div>

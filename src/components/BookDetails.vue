@@ -3,7 +3,7 @@ import type { Book } from '../scripts/type';
 import {OUT_OF_STOCK_VALUE, LOW_STOCK_VALUE, NO_COVER_LINK, NO_COVER_ALT, BOOK_COVER_ALT} from '../scripts/constants.ts'
 
 defineProps<{
-    book : Book 
+    book : Book | null 
 }>()
 
 const emit = defineEmits(['close-window'])
@@ -14,7 +14,7 @@ function handleCloseWindow(){
 </script>
 
 <template>
-  <div class="container border rounded p-2 ">
+  <div v-if="book !== null" class="container border rounded p-2 ">
     <div class="d-flex justify-content-between mb-2">
             <h3><b>Détails du livre</b></h3>
             <button class="btn btn-outline-danger" @click="handleCloseWindow"><i class="bi bi-x-lg"></i></button>

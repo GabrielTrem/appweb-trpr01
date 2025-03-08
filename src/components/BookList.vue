@@ -40,6 +40,7 @@ function handleDuplicateBook(book : Book){
                 <p class="text-decoration-underline"><strong>Opération</strong></p>
             </div>
             <BookItem 
+            v-if="books.length !== 0"
             v-for="book of books" 
             :key="book.id" 
             :book="book" 
@@ -48,6 +49,9 @@ function handleDuplicateBook(book : Book){
             @show-details="handleShowDetails($event)"
             @duplicate-book="handleDuplicateBook($event)"
             />
+            <div v-else class="list-group-item text-center">
+                Il n'y a aucun livre dans la liste pour le moment. Ajoutez-en un pour commencer !
+            </div>
         </div>
     </div>
 </template>
