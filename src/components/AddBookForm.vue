@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Book } from '../scripts/type';
 import {ref} from 'vue'
+import {NO_COVER_LINK, NO_COVER_ALT, BOOK_COVER_ALT, ERR_MESSAGE_TITLE, ERR_MESSAGE_SYNOPSIS, ERR_MESSAGE_PRICE, ERR_MESSAGE_STOCK} from '../scripts/constants.ts'
 
 const props = defineProps<{
     bookToDuplicate : Book | null
@@ -33,15 +34,32 @@ if(props.bookToDuplicate !== null){
 const emit = defineEmits(['add-book', 'close-form'])
 
 function handleAddBook(){
-    emit('add-book', {...newBook.value})
+    validateForm()
+    if(isValid.value){
+        emit('add-book', {...newBook.value})
+    }
 }
+
+const form = ref<HTMLFormElement | null>(null)
+let isValid = ref(false)
+
+function validateForm(){
+    if (form.value) {
+        isValid.value = form.value.checkValidity()
+        if(isValid.value){
+            form.value.classList.add('was-validated')
+        }
+    }
+}
+
 function handleCloseFormWindow(){
     emit('close-form')
 }
+
 </script>
 
 <template>
-    <div class="border rounded p-2 ">
+    <form ref="form" class="border rounded p-2 needs-validation" @submit.prevent="handleAddBook" novalidate>
         <div class="d-flex justify-content-between">
             <h3><b>Ajouter un livre</b></h3>
             <button class="btn btn-outline-danger" @click="handleCloseFormWindow"><i class="bi bi-x-lg"></i></button>
@@ -50,30 +68,47 @@ function handleCloseFormWindow(){
             <div class="col-10">
                 <div class="mb-3">
                     <label for="bookTitle" class="form-label">Titre *</label>
-                    <input type="text" class="form-control" id="bookTitle" v-model="newBook.title">
+                    <input 
+                        type="text" class="form-control" 
+                        :class="{'is-invalid' : !newBook.title, 'is-valid' : newBook.title}" 
+                        id="bookTitle" v-model="newBook.title" 
+                    required>
+                    <div id="bookTitleFeedback" class="invalid-feedback">Le titre est obligatoire!</div>
                 </div>
                 <div class="mb-3">
                     <label for="bookSynopsis" class="form-label">Résumé *</label>
-                    <textarea class="form-control" id="bookSynopsis" rows="4" v-model="newBook.synopsis"></textarea>
+                    <textarea class="form-control" 
+                        :class="{'is-invalid' : !newBook.synopsis, 'is-valid' : newBook.synopsis}" 
+                        id="bookSynopsis" rows="4" v-model="newBook.synopsis" required> 
+                    </textarea>
+                    <div id="bookSynopsisFeedback" class="invalid-feedback">Le résumé est obligatoire!</div>
                 </div>
             </div>
             <div class="col-2">
                 <label for="bookCover" class="form-label">Image</label>
                 <input type="url" class="form-control" id="bookCover" placeholder="URL" v-model="newBook.coverImage">
                 <div class="border d-flex rounded p-2 justify-content-center mt-2">
-                    <img v-if="newBook.coverImage !== ''" :src="newBook.coverImage" class="rounded" :alt="'Image of the cover of the book ' + newBook.title" height="133px">
-                    <img v-else src="../assets/images/no-cover.jpg" class="rounded" alt="Image representant un livre sans couverture specifique" height="133px">
+                    <img v-if="newBook.coverImage !== ''" :src="newBook.coverImage" class="rounded" :alt="BOOK_COVER_ALT + newBook.title" height="133px">
+                    <img v-else :src="NO_COVER_LINK" class="rounded" :alt="NO_COVER_ALT" height="133px">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="mb-3 col-6">
                     <label for="bookPrice" class="form-label">Prix *</label>
-                    <input type="number" step=0.01 class="form-control" id="bookPrice" v-model="newBook.price">
+                    <input type="number" step=0.01 class="form-control" 
+                        :class="{'is-invalid' : newBook.price <= 0, 'is-valid' : newBook.price > 0}" 
+                        id="bookPrice" v-model="newBook.price" required
+                    >
+                    <div id="bookPriceFeedback" class="invalid-feedback">Le prix doit être supérieur à 0</div>
                 </div>
                 <div class="mb-3 col-6">
-                    <label for="bookStock" class="form-label">Stock *</label>
-                    <input type="number" class="form-control" id="bookStock" v-model="newBook.stock">
+                    <label for="bookStock" class="form-label">Inventaire *</label>
+                    <input type="number" class="form-control" 
+                        :class="{'is-invalid' : newBook.stock < 0, 'is-valid' : newBook.stock >= 0}" 
+                        id="bookStock" v-model="newBook.stock" required
+                    >
+                    <div id="bookStockFeedback" class="invalid-feedback">Le stock ne peut pas être négatif!</div>
                 </div>
             </div>
             <div class="row">
@@ -86,8 +121,8 @@ function handleCloseFormWindow(){
                     <input type="date" class="form-control" id="bookReleaseDate" v-model="newBook.releaseDate">
                 </div>
             </div>
-            <button class="btn btn-success w-100" @click="handleAddBook">Ajouter</button>
-        </div>
+            <button class="btn btn-success w-100">Ajouter</button>
+        </form>
 </template>
 
 <style scoped>

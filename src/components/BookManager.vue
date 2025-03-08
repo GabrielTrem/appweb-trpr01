@@ -8,18 +8,6 @@ import ModifyBookForm from "./ModifyBookForm.vue";
 import BookDetails from "./BookDetails.vue";
 import {initialBooks} from "../scripts/initialBooks.ts"
 
-
-let bookTemplate = {
-    id : 1,
-    title : "Kaiju No. 8, Vol. 1",
-    synopsis : "With the highest kaiju-emergence rates in the world, Japan is no stranger to attack by deadly monsters. Enter the Japan Defense Force, a military organization tasked with the neutralization of kaiju. Kafka Hibino, a kaiju-corpse cleanup man, has always dreamed of joining the force. But when he gets another shot at achieving his childhood dream, he undergoes an unexpected transformation. How can he fight kaiju now that he’s become one himself?!",
-    author : "Naoya Matsumoto",
-    coverImage : "https://m.media-amazon.com/images/I/812qiXhyN+L._SL1500_.jpg",
-    releaseDate : "07/12/2021",
-    price : 15.99,
-    stock : 0
-}
-
 const books = ref<Book[]>(initialBooks);
 
 const filteredBooks = ref<Book[]>(books.value);
@@ -35,6 +23,11 @@ function addBook(newBook : Book){
 function modifyBook(modifiedBook : Book){
     const index = books.value.findIndex(book => book.id === modifiedBook.id);
     books.value[index] = modifiedBook;
+
+    const indexFiltered = filteredBooks.value.findIndex(book => book.id === modifiedBook.id);
+    if(indexFiltered !== -1){
+        filteredBooks.value[indexFiltered] = modifiedBook;
+    }
 }
 
 function removeBook(bookId : number) {
@@ -121,7 +114,7 @@ const exportToCSV = () => {
                   <div class="col-md-12">
                       <BookList 
                       :books="filteredBooks" 
-                      @open-modify-form="currentBookToModify = $event, showModifyingForm = true, showAddingForm = false"
+                      @open-modify-form="currentBookToModify = {...$event}, showModifyingForm = true, showAddingForm = false"
                       @remove-book="removeBook($event)"
                       @show-details="currentBookToShowDetails = $event, showBookDetailedView = true"
                       @duplicate-book="currentBookToDuplicate = $event, showModifyingForm = false, showAddingForm = true"
@@ -129,16 +122,16 @@ const exportToCSV = () => {
                   </div>
               </div>
               <div v-else class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-8">
                       <BookList 
                       :books="filteredBooks" 
-                      @open-modify-form="currentBookToModify = $event, showModifyingForm = true, showAddingForm = false"
+                      @open-modify-form="currentBookToModify = {...$event}, showModifyingForm = true, showAddingForm = false"
                       @remove-book="removeBook($event)"
                       @show-details="currentBookToShowDetails = $event, showBookDetailedView = true"
                       @duplicate-book="currentBookToDuplicate = $event, showModifyingForm = false, showAddingForm = true"
                       />
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                       <BookDetails :book="currentBookToShowDetails" @close-window="showBookDetailedView = false"/>
                   </div>
               </div>

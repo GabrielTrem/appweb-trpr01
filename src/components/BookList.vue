@@ -34,10 +34,10 @@ function handleDuplicateBook(book : Book){
                 <h3><strong></strong>Liste des livres ({{booksCount}})</h3>
             </div>
             <div class="d-flex list-group-item justify-content-between align-items-center">
-                <p><strong>•Couverture</strong></p>
-                <p><strong>•Titre</strong></p>
-                <p><strong>•Inventaire</strong></p>
-                <p><strong>•Opération</strong></p>
+                <p class="text-decoration-underline"><strong>Couverture</strong></p>
+                <p class="text-decoration-underline"><strong>Titre</strong></p>
+                <p class="text-decoration-underline"><strong>Inventaire</strong></p>
+                <p class="text-decoration-underline"><strong>Opération</strong></p>
             </div>
             <BookItem 
             v-for="book of books" 
