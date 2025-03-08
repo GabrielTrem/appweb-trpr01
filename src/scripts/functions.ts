@@ -1,7 +1,7 @@
-import { NO_COVER_LINK, NO_COVER_ALT } from "./constants.ts";
+import NO_COVER_IMG_LINK from '../assets/images/no-cover.jpg'
 
 export function handleImageError(event: Event) {
     const target = event.target as HTMLImageElement;
-    target.src = NO_COVER_LINK;
-    target.alt = NO_COVER_ALT
+    target.src = NO_COVER_IMG_LINK;
+    target.alt = "Aucune image disponible pour ce livre."
 }
