@@ -31,6 +31,7 @@ Utilisation:
 - Utiliser pour générer des messages d'erreurs (ex: Vérification de forms).
 - Utiliser pour générer un computed pour books.length
 - Utiliser pour générer un computed pour filteredBooks
+- Utiliser pour générer la fonction handleImageError et la balise img dans tous les components qui utilise la fonction
 
 # URL du repo Github
 

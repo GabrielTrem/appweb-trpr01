@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {type Book} from '../scripts/type.ts'
-import {OUT_OF_STOCK_VALUE, LOW_STOCK_VALUE, NO_COVER_LINK, NO_COVER_ALT, BOOK_COVER_ALT} from '../scripts/constants.ts'
+import {OUT_OF_STOCK_VALUE, LOW_STOCK_VALUE, BOOK_COVER_ALT} from '../scripts/constants.ts'
+import {handleImageError} from '../scripts/functions.ts'
 
 const props = defineProps<{
     book: Book
@@ -33,8 +34,13 @@ function truncateTitle(title : string, maxLength : number) {
 <template>
         <a href="#" class="list-group-item list-group-item-action" @click="handleShowDetails">
             <div class="d-flex justify-content-between align-items-center">
-                <img v-if="book.coverImage !== ''" :src="book.coverImage" class="rounded" :alt="BOOK_COVER_ALT + book.title" width="50px">
-                <img v-else :src="NO_COVER_LINK" class="rounded" :alt="NO_COVER_ALT" width="50px">
+                <img 
+                    :src="book.coverImage" 
+                    class="rounded" 
+                    :alt="BOOK_COVER_ALT + book.title" 
+                    height="80px"
+                    @error="handleImageError"
+                >
                 <h4 class="p-2">{{truncateTitle(book.title, maxLengthTitle)}}</h4>
                 <span v-if="book.stock >= LOW_STOCK_VALUE" class="badge text-bg-success">{{ book.stock }} en stock</span>
                 <span v-else-if="book.stock > OUT_OF_STOCK_VALUE" class="badge text-bg-warning">{{ book.stock }} en stock</span>

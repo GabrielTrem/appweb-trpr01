@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Book } from '../scripts/type';
-import {OUT_OF_STOCK_VALUE, LOW_STOCK_VALUE, NO_COVER_LINK, NO_COVER_ALT, BOOK_COVER_ALT} from '../scripts/constants.ts'
+import {OUT_OF_STOCK_VALUE, LOW_STOCK_VALUE, BOOK_COVER_ALT} from '../scripts/constants.ts'
+import {handleImageError} from '../scripts/functions.ts'
 
 defineProps<{
     book : Book | null 
@@ -21,8 +22,12 @@ function handleCloseWindow(){
         </div>
     <div class="row">
       <div class="col-md-4">
-        <img v-if="book.coverImage !== ''" :src="book.coverImage" :alt="BOOK_COVER_ALT + book.title" class="img-fluid" />
-        <img v-else :src="NO_COVER_LINK" :alt="NO_COVER_ALT" class="img-fluid" />
+        <img 
+          :src="book.coverImage" 
+          class="rounded img-fluid" 
+          :alt="BOOK_COVER_ALT + book.title" 
+          @error="handleImageError"
+        >
       </div>
       <div class="col-md-8">
         <h3>{{ book.title }}</h3>

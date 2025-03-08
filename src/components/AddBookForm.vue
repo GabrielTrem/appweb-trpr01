@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Book } from '../scripts/type';
 import {ref} from 'vue'
-import {NO_COVER_LINK, NO_COVER_ALT, BOOK_COVER_ALT, ERR_MESSAGE_TITLE, ERR_MESSAGE_SYNOPSIS, ERR_MESSAGE_PRICE, ERR_MESSAGE_STOCK} from '../scripts/constants.ts'
+import {BOOK_COVER_ALT, ERR_MESSAGE_TITLE, ERR_MESSAGE_SYNOPSIS, ERR_MESSAGE_PRICE, ERR_MESSAGE_STOCK} from '../scripts/constants.ts'
+import {handleImageError} from '../scripts/functions.ts'
 
 const props = defineProps<{
     bookToDuplicate : Book | null
@@ -88,8 +89,13 @@ function handleCloseFormWindow(){
                 <label for="bookCover" class="form-label">Image</label>
                 <input type="url" class="form-control" id="bookCover" placeholder="URL" v-model="newBook.coverImage">
                 <div class="border d-flex rounded p-2 justify-content-center mt-2">
-                    <img v-if="newBook.coverImage !== ''" :src="newBook.coverImage" class="rounded" :alt="BOOK_COVER_ALT + newBook.title" height="133px">
-                    <img v-else :src="NO_COVER_LINK" class="rounded" :alt="NO_COVER_ALT" height="133px">
+                    <img 
+                        :src="newBook.coverImage" 
+                        class="rounded" 
+                        :alt="BOOK_COVER_ALT + newBook.title" 
+                        height="133px"
+                        @error="handleImageError"
+                    >
                 </div>
             </div>
         </div>
