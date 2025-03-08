@@ -19,7 +19,6 @@ function addBook(newBook : Book){
     lastId.value++
     newBook.id = lastId.value
     books.value.push(newBook)
-    // filteredBooks.value.push(newBook)
 }
 
 function modifyBook(modifiedBook : Book){
