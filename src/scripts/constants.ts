@@ -1,6 +1,6 @@
 export const OUT_OF_STOCK_VALUE = 0
 export const LOW_STOCK_VALUE = 10
-export const NO_COVER_LINK = "/appweb-trpr01/src/assets/images/no-cover.jpg"
+export const NO_COVER_LINK = "src/assets/images/no-cover.jpg"
 export const NO_COVER_ALT = "Aucune image disponible pour ce livre."
 export const BOOK_COVER_ALT = "Couverture du livre "
 export const ERR_MESSAGE_TITLE = "Le titre est obligatoire!"
