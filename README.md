@@ -32,6 +32,8 @@ Utilisation:
 - Utiliser pour générer un computed pour books.length
 - Utiliser pour générer un computed pour filteredBooks
 - Utiliser pour générer la fonction handleImageError et la balise img dans tous les components qui utilise la fonction
+- Utiliser pour trouver une solution au bug du chemin de no-cover.jpg quand déployé
+- Utiliser pour trouver une solution au component addBook and modifyBook qui ne update pas avec le nouveau livre si déjà ouvert
 
 # URL du repo Github
 

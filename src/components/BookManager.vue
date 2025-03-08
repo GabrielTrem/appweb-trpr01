@@ -28,7 +28,6 @@ function addBook(newBook : Book){
     lastId.value++
     newBook.id = lastId.value
     books.value.push(newBook)
-    console.log(lastId.value)
 }
 
 function modifyBook(modifiedBook : Book){
@@ -108,13 +107,19 @@ const exportToCSV = () => {
           <div class="mb-2">
               <div v-if="showAddingForm">
                   <AddBookForm 
+                    :key="currentBookToDuplicate? currentBookToDuplicate.id : 0"
                     :bookToDuplicate="currentBookToDuplicate" 
                     @add-book="addBook($event), currentBookToDuplicate = null" 
                     @close-form="showAddingForm = false, currentBookToDuplicate = null"
                   />
               </div>
               <div v-if="showModifyingForm, currentBookToModify !== null">
-                  <ModifyBookForm :book="currentBookToModify" @modify-book="modifyBook($event)" @close-form="showModifyingForm = false, currentBookToModify = null"/>
+                  <ModifyBookForm 
+                  :key="currentBookToModify.id"
+                  :book="currentBookToModify" 
+                  @modify-book="modifyBook($event)" 
+                  @close-form="showModifyingForm = false, currentBookToModify = null"
+                  />
               </div>
               <div class="row">
                   <div :class="showBookDetailedView ? 'col-md-8' : 'col-md-12'">
